@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "02300924.C": "cpp"
-    }
+        "02300924.C": "cpp",
+        "2071024.C": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
