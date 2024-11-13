@@ -2,11 +2,11 @@
 #include <stdio.h>
 
 int main(){
-    int a1, m1m, g1, a2, m2, g2;
+    int a1, m1m, g1, a2, m2, g2, bisestile;
     //richiesta prima data
     printf("inserisci la prima data nel formato g, m, aaaa: ");
-    scanf("%d%d%d; &g1, &m1, &a1);
-    printf("%d%d%d%"; g1,m1,a1);
+    scanf("%d%d%d"; &g1, &m1, &a1);
+    printf("%d%d%d"; g1,m1,a1);
 
     //richiesta prima data
 

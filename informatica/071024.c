@@ -16,8 +16,8 @@ float n1, n2, n3, media, max, min
     min=01;
     if(max<n2)
         max=n2;
-    else
-        if(max<n3)
+    else{
+          if(max<n3)
             max=n3;
     printf("il massimo è; %f, max");
     if (min>n2){
@@ -25,6 +25,7 @@ float n1, n2, n3, media, max, min
         if(min>n3)
             min=n3;
 }
+    }
 else    
     if(min>n3)
         min=n3;
@@ -36,7 +37,7 @@ else
 
 
 
-
+return 0;
 
 
 
