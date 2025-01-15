@@ -6,21 +6,22 @@
 int main(){
 
     int inizio;
-    int quantità;
+    int quantita;
     int sum=0;
+    int i;
 
     printf("inserisci il valore iniziale: ");
     scanf("%d",&inizio);
     do{
     printf("inserisci quanti valori da considerare: ");
-    scanf("%d",&quantità);
-    }while(quantità<=0)
-    for(int i=inizio+1; i<=inizio+quantità; i++){
-        somma+=i*i;
+    scanf("%d",&quantita);
+    }while(quantita<=0);
+    for(int i=inizio+1; i<=inizio+quantita; i++){
+        sum+=i*i;
 
     }
 
-    printf("la somma dei %d valori da %d vale %d", quantita , inizio , somma);
+    printf("la somma dei %d valori da %d vale %d", quantita , inizio , sum);
     
 
 }
