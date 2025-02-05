@@ -15,7 +15,7 @@ int main(){
         scanf("%d", &n);
         fflush(stdin); 
     }while(n<=50);  //il ciclo si ripete finchè l'utente non inserisce un valore positivo maggiore di 50
-do{
+    do{
         printf("Inserisci un valore positivo minore di 10: "); //chiedo all'utente di inserire un valore positivo minore di 10
         scanf("%d", &d);
         fflush(stdin);

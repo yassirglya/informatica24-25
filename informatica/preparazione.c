@@ -21,10 +21,12 @@ int main() {
         
         n1=rand()%20-10;  
         n2=rand()%20-10; 
-        printf("Coppia %d: (%d, %d)\n",i+1,a,b);
+        printf("Coppia %d: (%d, %d)\n",i+1,n1,n2);
         if(n1==-n2) {
             cnt++;
         }
     } 
     printf("Numero di coppie con valori opposti: %d\n",cnt);
+
+    return 0;
 }
