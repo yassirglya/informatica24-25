@@ -13,21 +13,20 @@ int main(){
     }while(n<0);
     conv=converti(n);
     printf("%ld\n" ,conv);
-
-    long converti(int_n){
-        int quox=_n,
+}
+long converti(int _n){
+        int quox=_n;
         int resto=0;
         int cont=0;
         int _conv=0;
-
         while(quox!=0){
             resto=quox%2;
             quox=quox/2;
-            _conv=pow(10,cont);
+            _conv+=resto*pow(10,cont);
             cont++;
         }
         return _conv;
     }
 
-}
+
 
