@@ -17,11 +17,13 @@ int main(){
         scanf("%d", &scelta);
     }while(scelta<0 || scelta>1);
 
-    printf("Inserisci un numero: ");
-    scanf("%d", &num1);
-    printf("%d", num1);
+   
+
     do
     {
+        
+        printf("Inserisci un numero: ");
+        scanf("%d", &num1);
         printf("Inserisci un numero: ");
         scanf("%d", &num2);
         if(scelta==0)
