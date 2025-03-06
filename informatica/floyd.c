@@ -14,7 +14,7 @@ N=5
 void floyd (int _righe ,int _colonna,int _n){
 
     int cnt=1;
-    for(int i=1; i<=_n; i+=1){
+    for(int i=1; i<=_n; i++){
         
         for(int j=1 ; j<=i ; j++){
             printf("%d ", cnt);
