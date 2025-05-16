@@ -29,75 +29,92 @@
         <h2>Codice Arduino</h2>
         <div class="code-box">
           <pre><code>
-// Pin dichiarati
-const int pinTrig = 6;
-const int pinEcho = 4;
-const int pinBuzzer = 8;
-const int pinLedVerde = 7;
-const int pinLedRosso = 2;
-const int pinPulsante = 5;
-const int pinFotores = A1;
-const int pinServo = A2;
+#include <Servo.h>  // <--- Aggiunta: Libreria per microservo
 
-// Pin per LCD (senza libreria)
-const int pinRS = 3;
-const int pinEN = 13;
-const int pinD4 = 10;
+const int pinTrig = 6;            // Trig del sensore ultrasuoni (manda il suono)
+const int pinEcho = 4;            // Echo del sensore ultrasuoni (riceve il suono)
+const int pinBuzzer = 8;          // Allarme sonoro
+const int pinLedVerde = 7;        // LED verde (tutto ok)
+const int pinLedRosso = 2;        // LED rosso (allarme attivo)
+const int pinPulsante = 5;        // Pulsante per spegnere l’allarme
+const int pinFotores = A1;        // Sensore di luce (fotoresistenza)
+const int pinServo = A2;          // <--- Aggiunta: pin del microservo
+
+const int pinRS = 3;              // Pin RS per LCD
+const int pinEN = 13;             // Pin EN per LCD
+const int pinD4 = 10;             // Pin dati LCD
 const int pinD5 = 11;
 const int pinD6 = 9;
 const int pinD7 = 12;
 
-// Soglie
-const int sogliaDistanza = 10;
-const int sogliaLuce = 400;
+const int sogliaDistanza = 10;    // Se qualcosa si avvicina a meno di 10 cm
+const int sogliaLuce = 400;       // Sotto 400 è considerato buio
+const int modoPullup = INPUT_PULLUP; // Usa resistenza interna per il pulsante
 
+// Stati possibili dell’allarme
 enum StatoAllarme { DISATTIVATO, ATTIVO };
 StatoAllarme stato = DISATTIVATO;
 StatoAllarme statoPrec = DISATTIVATO;
 
+// <--- Aggiunta: oggetto e stato del servo
 Servo cancello;
 bool cancelloChiuso = false;
 
-// Icone per LCD
+// Disegno del sole per l’LCD
 byte sole[8] = {
-  B00100, B10101, B01110, B11111,
-  B01110, B10101, B00100, B00000
+  B00100,
+  B10101,
+  B01110,
+  B11111,
+  B01110,
+  B10101,
+  B00100,
+  B00000
 };
 
+// Disegno della luna per l’LCD
 byte luna[8] = {
-  B00000, B00110, B01100, B11100,
-  B11100, B01100, B00110, B00000
+  B00000,
+  B00110,
+  B01100,
+  B11100,
+  B11100,
+  B01100,
+  B00110,
+  B00000
 };
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600);  // Serve per vedere i valori nel monitor seriale
 
+  // Impostiamo i pin in entrata o uscita
   pinMode(pinTrig, OUTPUT);
   pinMode(pinEcho, INPUT);
   pinMode(pinBuzzer, OUTPUT);
   pinMode(pinLedVerde, OUTPUT);
   pinMode(pinLedRosso, OUTPUT);
-  pinMode(pinPulsante, INPUT_PULLUP);
+  pinMode(pinPulsante, modoPullup);
   pinMode(pinFotores, INPUT);
 
-  cancello.attach(pinServo);
-  cancello.write(0);
+  cancello.attach(pinServo);      // <--- Aggiunta: collega il microservo
+  cancello.write(0);              // <--- Aggiunta: cancello inizialmente aperto
 
-  lcdInizializza();
-  creaIcone();
-  aggiornaDisplay();
+  lcdInizializza();   // Avvia il display LCD
+  creaIcone();        // Carica le immagini sole e luna sull’LCD
+  aggiornaDisplay();  // Mostra il messaggio iniziale
 }
 
 void loop() {
-  bool premuto = digitalRead(pinPulsante) == LOW;
-  int luce = analogRead(pinFotores);
-  int distanza = misuraDistanza();
+  bool premuto = (digitalRead(pinPulsante) == LOW); // Controllo se premo il pulsante
+  int luce = analogRead(pinFotores);                // Leggo quanto è chiaro/scuro
+  int distanza = misuraDistanza();                  // Leggo quanto è vicino un oggetto
 
+  // <--- Aggiunta: controllo giorno/notte e movimento microservo
   if (luce < sogliaLuce && !cancelloChiuso) {
-    muoviServoLento(0, 90);
+    cancello.write(90);             // chiude il cancello
     cancelloChiuso = true;
   } else if (luce >= sogliaLuce && cancelloChiuso) {
-    muoviServoLento(90, 0);
+    cancello.write(0);              // apre il cancello
     cancelloChiuso = false;
   }
 
@@ -106,35 +123,187 @@ void loop() {
   Serial.print(" cm - Luce: ");
   Serial.println(luce);
 
+  // Se allarme attivo e premo, lo disattivo
   if (stato == ATTIVO && premuto) {
     stato = DISATTIVATO;
-  } else if (stato == DISATTIVATO) {
+  }
+  // Se è disattivato e qualcuno si avvicina al buio, lo attivo
+  else if (stato == DISATTIVATO) {
     if (distanza > 0 && distanza < sogliaDistanza && luce < sogliaLuce) {
       stato = ATTIVO;
     }
   }
 
+  // Se lo stato cambia, aggiorno il display
   if (stato != statoPrec) {
     aggiornaDisplay();
     statoPrec = stato;
   }
 
+  // Se è attivo: suona, accendi rosso
   if (stato == ATTIVO) {
     digitalWrite(pinLedRosso, HIGH);
     digitalWrite(pinLedVerde, LOW);
-    tone(pinBuzzer, 2000);
+    tone(pinBuzzer, 2000);  // suona
   } else {
+    // Se disattivo: verde acceso, silenzio
     digitalWrite(pinLedRosso, LOW);
     digitalWrite(pinLedVerde, HIGH);
     noTone(pinBuzzer);
   }
 
-  aggiornaIconaLuce();
+  aggiornaIconaLuce(); // Cambia sole/luna se cambia luce
   delay(100);
 }
 
-// — Funzioni LCD base (senza libreria) —
-// ... (resto del codice invariato) ...
+// — Funzioni per controllare l’LCD (scrittura, invio comandi ecc.) —
+
+void lcdComando(byte valore) {
+  digitalWrite(pinRS, LOW);
+  lcdInvia(valore);
+}
+
+void lcdScrivi(byte valore) {
+  digitalWrite(pinRS, HIGH);
+  lcdInvia(valore);
+}
+
+void lcdInvia(byte valore) {
+  // Invia il byte in 2 pezzi da 4 bit ciascuno
+  digitalWrite(pinD4, (valore >> 4) & 0x01);
+  digitalWrite(pinD5, (valore >> 5) & 0x01);
+  digitalWrite(pinD6, (valore >> 6) & 0x01);
+  digitalWrite(pinD7, (valore >> 7) & 0x01);
+  lcdAbilita();
+
+  digitalWrite(pinD4, valore & 0x01);
+  digitalWrite(pinD5, (valore >> 1) & 0x01);
+  digitalWrite(pinD6, (valore >> 2) & 0x01);
+  digitalWrite(pinD7, (valore >> 3) & 0x01);
+  lcdAbilita();
+}
+
+void lcdAbilita() {
+  digitalWrite(pinEN, LOW);
+  delayMicroseconds(1);
+  digitalWrite(pinEN, HIGH);
+  delayMicroseconds(1);
+  digitalWrite(pinEN, LOW);
+  delayMicroseconds(100);
+}
+
+void lcdInizializza() {
+  // Imposto i pin e inizializzo il display in modalità 4 bit
+  pinMode(pinRS, OUTPUT);
+  pinMode(pinEN, OUTPUT);
+  pinMode(pinD4, OUTPUT);
+  pinMode(pinD5, OUTPUT);
+  pinMode(pinD6, OUTPUT);
+  pinMode(pinD7, OUTPUT);
+
+  delay(50);
+  digitalWrite(pinRS, LOW);
+  digitalWrite(pinD4, LOW);
+  digitalWrite(pinD5, HIGH);
+  digitalWrite(pinD6, LOW);
+  digitalWrite(pinD7, LOW);
+  lcdAbilita();
+
+  lcdComando(0x28); // modalità 4-bit, 2 righe
+  lcdComando(0x0C); // display acceso, cursore spento
+  lcdComando(0x06); // cursore va avanti
+  lcdComando(0x01); // pulisce lo schermo
+  delay(2);
+}
+
+void lcdPulisci() {
+  lcdComando(0x01);
+  delay(2);
+}
+
+void lcdCursore(byte col, byte riga) {
+  const byte posizioni[] = {0x00, 0x40};
+  lcdComando(0x80 | (col + posizioni[riga]));
+}
+
+void lcdStampa(const char* testo) {
+  for (int i = 0; testo[i] != '\0'; i++) {
+    lcdScrivi(testo[i]);
+  }
+}
+
+// — Crea le icone per sole e luna nel display LCD —
+
+void creaIcone() {
+  lcdComando(0x40); // parte della memoria CGRAM
+  for (int i = 0; i < 8; i++) lcdScrivi(sole[i]);
+  for (int i = 0; i < 8; i++) lcdScrivi(luna[i]);
+}
+
+// — Aggiorna quello che c’è sul display LCD —
+
+void aggiornaDisplay() {
+  int luce = analogRead(pinFotores);
+  lcdPulisci();
+
+  if (stato == ATTIVO) {
+    lcdCursore(0, 0);
+    lcdStampa("INTRUSIONE");
+    lcdCursore(0, 1);
+    lcdStampa("RILEVATA");
+  } else {
+    lcdCursore(0, 0);
+    lcdStampa("ALLARME");
+    lcdCursore(0, 1);
+    lcdStampa("DISATTIVO");
+  }
+
+  // Mostra sole o luna nell’angolo in base alla luce
+  lcdCursore(15, 0);
+  if (luce < sogliaLuce) {
+    lcdScrivi(1); // luna
+  } else {
+    lcdScrivi(0); // sole
+  }
+}
+
+// — Calcola la distanza usando l’HC-SR04 —
+
+int misuraDistanza() {
+  digitalWrite(pinTrig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pinTrig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(pinTrig, LOW);
+
+  long durata = pulseIn(pinEcho, HIGH, 30000); // ascolta per max 30ms
+  if (durata == 0) return -1; // niente ricevuto
+  return durata * 0.0344 / 2; // formula per convertire in cm
+}
+
+// — Cambia l’icona tra sole e luna quando cambia luce (solo se allarme è OFF) —
+
+void aggiornaIconaLuce() {
+  static int lucePrec = -1;
+  int luceCorrente = analogRead(pinFotores);
+
+  if (stato == DISATTIVATO) {
+    bool cambiamento = (luceCorrente < sogliaLuce && lucePrec >= sogliaLuce) ||
+                       (luceCorrente >= sogliaLuce && lucePrec < sogliaLuce);
+
+    if (cambiamento) {
+      lcdCursore(15, 0);
+      if (luceCorrente < sogliaLuce) {
+        lcdScrivi(1); // luna
+      } else {
+        lcdScrivi(0); // sole
+      }
+    }
+  }
+
+  lucePrec = luceCorrente;
+}
+
           </code></pre>
       </section>
     </div>
