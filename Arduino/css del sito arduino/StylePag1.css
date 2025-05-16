@@ -1,0 +1,108 @@
+/* Reset di base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo della pagina */
+body {
+  font-family: Arial, sans-serif;
+  background: #E7F6FB;    /* Sfondo azzurro chiaro  */
+  color: #002F4B;         /* Blu-grigio scuro  */
+  line-height: 1.6;
+  padding-bottom: 60px;
+}
+
+/* Intestazione */
+header {
+  background: #007B9F;  
+  color: #FFFFFF;
+  padding: 20px 0;
+  text-align: center;
+}
+header h1 {
+  font-size: 2.5em;
+  color: #ffffff;        
+}
+
+/* Barra di navigazione */
+nav {
+  background: #005F7F;   /* Blu leggermente più scuro */
+  padding: 10px 20px;
+}
+nav ul {
+  text-align: center;
+}
+nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+nav ul li a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: color 0.3s ease;
+}
+nav ul li a:hover {
+  color: #003F5E;        /* Blu notte scuro al passaggio del mouse */
+}
+
+/* Contenitore principale */
+.container {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Sezioni */
+section {
+  background: #FFFFFF;
+  padding: 30px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+section h2 {
+  color: #0096BB;        
+  margin-bottom: 10px;
+  border-bottom: 2px solid #ADD8E6; /* Bordo azzurro chiaro */
+  padding-bottom: 5px;
+}
+
+/* Testi e liste */
+p, ul, ol {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #132e3d;
+}
+ul, ol {
+  margin-left: 20px;
+}
+
+/* Contenitore immagini e immagini */
+.immagine-container,.img1,.mia-immagine {
+  text-align: center;
+}
+.img1 {
+  max-width: 80%;
+  height: auto;
+}
+.mia-immagine {
+  max-width: 30%;
+  height: auto;
+}
+
+/* Piè di pagina */
+.footer-container {
+  text-align: center;
+  background-color: #007B9F; 
+  color: #FFFFFF;
+  padding: 10px;
+  margin-top: 30px;
+  border-radius: 4px;
+}
+
+#footer-colore {
+  color: #FFFFFF;
+}

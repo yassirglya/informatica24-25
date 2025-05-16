@@ -1,0 +1,123 @@
+/* Reset base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+  background: #FBF7F1; 
+  color: #5C4A38;      /* Marrone leggermente più chiaro per il testo */
+  line-height: 1.6;
+  padding-bottom: 60px;
+}
+
+/* Header */
+header {
+  background: #A76F43; 
+  color: #FFFFFF;
+  padding: 20px 0;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5em;
+  color: #E1C9A4;      /* Titolo in marrone chiaro*/
+}
+
+/* Navbar */
+nav {
+  background: #B98255; /* Sienna schiarita */
+  padding: 10px 20px;
+}
+
+nav ul {
+  text-align: center;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #FFEFE3;      /* Hover molto chiaro */
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Sezioni */
+section {
+  background: #FFFFFF;
+  padding: 30px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(92, 74, 56, 0.15);
+}
+
+section h2 {
+  color: #A76F43;      /* Titoli delle sezioni in marrone schiarito */
+  margin-bottom: 10px;
+  border-bottom: 2px solid #E1C9A4; /* Bordo inferiore chiaro */
+  padding-bottom: 5px;
+}
+
+/* Testi e liste */
+p, ul, ol {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #462604;
+}
+
+ul, ol {
+  margin-left: 20px;
+}
+
+/* Immagini */
+.immagine-container,
+.mia-immagine,
+.img-small {
+  text-align: center;
+}
+
+.mia-immagine {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-small {
+  max-width: 50%;
+  height: auto;
+}
+
+/* Return text */
+.return {
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-size: 0.95em;
+  color: #A76F43;
+}
+
+/* Footer */
+.footer-container {
+  text-align: center;
+  background-color: #A76F43; /* Footer in marrone schiarito */
+  color: #FFFFFF;
+  padding: 10px;
+  margin-top: 30px;
+  border-radius: 4px;
+}

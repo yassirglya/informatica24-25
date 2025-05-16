@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <link rel="stylesheet" href="../Arduino/css del sito arduino/StylePag1.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto Arduino: Giardino Intelligente Anti-Furto - Codice</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>Progetto Arduino: Casa con giardino dotato di allarme notturno</h1>
+      <p>Sistema di sicurezza per il monitoraggio del giardino con Arduino</p>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="../Arduino/Pag1.html">Home</a></li>
+        <li><a href="../Arduino/Pag2.html">I componenti</a></li>
+        <li><a href="../Arduino/Pag3.html">Il Codice Arduino</a></li>
+        <li><a href="../Arduino/Pag4.html">Il fabbricato</a></li>
+        <li><a href="../Arduino/Pag5.html">La vecchia versione</a></li>
+        <li><a href="../Arduino/Pag6.html">La conclusione</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <section >
+        <h2>Codice Arduino</h2>
+        <div class="code-box">
+          <pre><code>
+// Pin dichiarati
+const int pinTrig = 6;
+const int pinEcho = 4;
+const int pinBuzzer = 8;
+const int pinLedVerde = 7;
+const int pinLedRosso = 2;
+const int pinPulsante = 5;
+const int pinFotores = A1;
+const int pinServo = A2;
+
+// Pin per LCD (senza libreria)
+const int pinRS = 3;
+const int pinEN = 13;
+const int pinD4 = 10;
+const int pinD5 = 11;
+const int pinD6 = 9;
+const int pinD7 = 12;
+
+// Soglie
+const int sogliaDistanza = 10;
+const int sogliaLuce = 400;
+
+enum StatoAllarme { DISATTIVATO, ATTIVO };
+StatoAllarme stato = DISATTIVATO;
+StatoAllarme statoPrec = DISATTIVATO;
+
+Servo cancello;
+bool cancelloChiuso = false;
+
+// Icone per LCD
+byte sole[8] = {
+  B00100, B10101, B01110, B11111,
+  B01110, B10101, B00100, B00000
+};
+
+byte luna[8] = {
+  B00000, B00110, B01100, B11100,
+  B11100, B01100, B00110, B00000
+};
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(pinTrig, OUTPUT);
+  pinMode(pinEcho, INPUT);
+  pinMode(pinBuzzer, OUTPUT);
+  pinMode(pinLedVerde, OUTPUT);
+  pinMode(pinLedRosso, OUTPUT);
+  pinMode(pinPulsante, INPUT_PULLUP);
+  pinMode(pinFotores, INPUT);
+
+  cancello.attach(pinServo);
+  cancello.write(0);
+
+  lcdInizializza();
+  creaIcone();
+  aggiornaDisplay();
+}
+
+void loop() {
+  bool premuto = digitalRead(pinPulsante) == LOW;
+  int luce = analogRead(pinFotores);
+  int distanza = misuraDistanza();
+
+  if (luce < sogliaLuce && !cancelloChiuso) {
+    muoviServoLento(0, 90);
+    cancelloChiuso = true;
+  } else if (luce >= sogliaLuce && cancelloChiuso) {
+    muoviServoLento(90, 0);
+    cancelloChiuso = false;
+  }
+
+  Serial.print("Distanza: ");
+  Serial.print(distanza);
+  Serial.print(" cm - Luce: ");
+  Serial.println(luce);
+
+  if (stato == ATTIVO && premuto) {
+    stato = DISATTIVATO;
+  } else if (stato == DISATTIVATO) {
+    if (distanza > 0 && distanza < sogliaDistanza && luce < sogliaLuce) {
+      stato = ATTIVO;
+    }
+  }
+
+  if (stato != statoPrec) {
+    aggiornaDisplay();
+    statoPrec = stato;
+  }
+
+  if (stato == ATTIVO) {
+    digitalWrite(pinLedRosso, HIGH);
+    digitalWrite(pinLedVerde, LOW);
+    tone(pinBuzzer, 2000);
+  } else {
+    digitalWrite(pinLedRosso, LOW);
+    digitalWrite(pinLedVerde, HIGH);
+    noTone(pinBuzzer);
+  }
+
+  aggiornaIconaLuce();
+  delay(100);
+}
+
+// — Funzioni LCD base (senza libreria) —
+// ... (resto del codice invariato) ...
+          </code></pre>
+      </section>
+    </div>
+
+    
+    <div class="footer-container">
+      <footer>
+        <p id="footer-colore">2025 Progetto Arduino - Giardino Intelligente Anti-Furto</p>
+      </footer>
+    </div>
+  </body>
+</html>

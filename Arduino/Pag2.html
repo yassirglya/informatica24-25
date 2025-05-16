@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <link rel="stylesheet" href="../Arduino/css del sito arduino/StylePag1.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto Arduino: Giardino Intelligente Anti-Furto - Componenti</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>Progetto Arduino: Casa con giardino dotato di allarme notturno</h1>
+      <p>Sistema di sicurezza per il monitoraggio del giardino con Arduino</p>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="../Arduino/Pag1.html">Home</a></li>
+        <li><a href="../Arduino/Pag2.html">I componenti</a></li>
+        <li><a href="../Arduino/Pag3.html">Il Codice Arduino</a></li>
+        <li><a href="../Arduino/Pag4.html">Il fabbricato</a></li>
+        <li><a href="../Arduino/Pag5.html">La vecchia versione</a></li>
+        <li><a href="../Arduino/Pag6.html">La conclusione</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      
+      <section >
+        <h2>Componenti Necessari</h2>
+
+        <section >
+          <h3>Pulsante di Reset</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/micro-pulsante.jpg" alt="Pulsante">
+          </div>
+          <p>Il <strong>pulsante di reset</strong> serve a spegnere / a fermare il loop dell'allarme da dentro la casa .</p>
+        </section>
+
+        <section >
+          <h3>Fotoresistore</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/fotoresistenza.jpg" alt="Pulsante">
+          </div>
+          <p>La <strong>fotoresistenza</strong> Serve a rendere il tutto funzionante quando c'è notte(sotto la soglia del buio) quando c'è luce il sensore ad ultrasuoni é disattivato quindi a sua volta il sistema di allarme non è attivo  .</p>
+        </section>
+
+    
+        <section >
+          <h3>LED</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/LED.jpg" alt="LED standard">
+          </div>
+          <p>Il <strong>LED</strong> (abbiamo usato led rosso e verde ) di default il led è verde , quando tutto é normale , il led verde si spegne quando il sensore ad ultra suoni rileva un intrusione e il led rosso si accende  .</p>
+        </section>
+
+        <section >
+          <h3>Sensore ad Ultrasuoni HC-SR04</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/sensore-ultrasuoni-hc-sr04.jpg" alt="Sensore ad ultrasuoni HC-SR04">
+          </div>
+          <p>Il <strong>sensore HC-SR04</strong> Ha un raggio di 10cm quindi entro i 10 cm se rileva un movimento fa attivare il buzzer(allarme).</p>
+        </section>
+
+        <section >
+          <h3>Buzzer</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/buzzer.jpg" alt="Buzzer">
+          </div>
+          <p>Il <strong>buzzer</strong> L'abbiamo usato per simulare il suono che fa un allarme , si attiva quando il sensore gli da il segnale .</p>
+        </section>
+
+        <section >
+          <h3>Display LCD 16×2</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/Display LCD 16x2.jpg" alt="Display LCD 16x2">
+          </div>
+          <p>Il <strong>display LCD 16×2</strong> può mostrare 2 righe da 16 caratteri. L'abbiamo usato per mostrare (dentro la casa ) se l'allarme é disattivato o c'é un'intrusione (con "intrusione rilevata") per farlo andare abbiamo fatto una codifica ASCII da 0 che lavora con 4 bit (nibble).</p>
+        </section>
+
+        <section
+          <h3>Servo Motore</h3>
+          <div class="immagine-container">
+            <img class="mia-immagine" src="../Arduino/Immagini/Componenti/servo-motore.jpg" alt="Servo motore standard">
+          </div>
+          <p>Il <strong>servo motore</strong> L'abbiamo usato per far aprire e chiudere il cancello , abbiamo  creato un canceello di cartone poi attaccato al braccio meccanico che ruota da 0 a 90 gradi.</p>
+        </section>
+
+      </section>
+    </div>
+
+    
+    <div class="footer-container">
+      <footer>
+        <p id="footer-colore">2025 Progetto Arduino - Giardino Intelligente Anti-Furto</p>
+      </footer>
+    </div>
+  </body>
+</html>
